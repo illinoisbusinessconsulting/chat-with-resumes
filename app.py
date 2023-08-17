@@ -17,6 +17,9 @@ from langchain.schema import SystemMessage, AIMessage, HumanMessage
 from langchain.prompts import MessagesPlaceholder
 from langsmith import Client
 import gradio as gr
+from dotenv import load_dotenv
+
+load_dotenv()
 
 q = SimpleQueue()
 handler = StreamingGradioCallbackHandler(q)
