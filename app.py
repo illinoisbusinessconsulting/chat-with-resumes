@@ -18,8 +18,6 @@ from langchain.prompts import MessagesPlaceholder
 from langsmith import Client
 import gradio as gr
 
-os.environ['OPENAI_API_KEY'] = "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"
-
 q = SimpleQueue()
 handler = StreamingGradioCallbackHandler(q)
 llm = ChatOpenAI(temperature=0, streaming=True, model="gpt-4")
