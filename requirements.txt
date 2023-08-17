@@ -7,3 +7,4 @@ unstructured
 pdf2image
 pdfminer-six
 python-dotenv
+azure-storage-blob

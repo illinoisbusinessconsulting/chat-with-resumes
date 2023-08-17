@@ -3,7 +3,7 @@ from threading import Thread
 from queue import SimpleQueue
 from langchain import PromptTemplate, OpenAI, LLMChain
 from callbacks import StreamingGradioCallbackHandler, job_done
-from langchain.document_loaders import RecursiveUrlLoader, DirectoryLoader, UnstructuredPDFLoader
+from langchain.document_loaders import RecursiveUrlLoader, DirectoryLoader, UnstructuredPDFLoader, AzureBlobStorageContainerLoader
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores.faiss import FAISS
@@ -21,18 +21,22 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+azure_conn_string = os.environ['AZURE_CONN_STRING']
+azure_container = os.environ['AZURE_CONTAINER']
+
 q = SimpleQueue()
 handler = StreamingGradioCallbackHandler(q)
 llm = ChatOpenAI(temperature=0, streaming=True, model="gpt-4")
 
 def configure_retriever():
-    vectorstore_path = "vs/vectorstore"
+    vectorstore_path = "vs"
     embeddings = OpenAIEmbeddings()
     if os.path.exists(vectorstore_path):
         print("Loading existing vector store")
         vectorstore = FAISS.load_local(vectorstore_path, embeddings)
     else:
-        loader = DirectoryLoader("docs/", loader_cls=UnstructuredPDFLoader, recursive=True)
+        loader = AzureBlobStorageContainerLoader(conn_str=azure_conn_string, container=azure_container)
+        # loader = DirectoryLoader("docs/", loader_cls=UnstructuredPDFLoader, recursive=True)
         docs = loader.load()
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
