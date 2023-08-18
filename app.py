@@ -118,5 +118,5 @@ with gr.Blocks() as demo:
     interface.chatbot.value = get_first_message([])
 
 # demo.queue().launch(server_port=7861)
-demo.queue().launch(server_port=80)
+demo.queue().launch(server_port=7860)
    
