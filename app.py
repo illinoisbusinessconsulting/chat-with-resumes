@@ -117,6 +117,6 @@ with gr.Blocks() as demo:
     interface = gr.ChatInterface(fn=streaming_chat, title="Chat with Resumes", retry_btn=None, undo_btn=None, autofocus=True, stop_btn=None)
     interface.chatbot.value = get_first_message([])
 
-# demo.queue().launch(server_port=7861)
-demo.queue().launch()
+port = int(os.environ.get('PORT', 7861))
+demo.queue().launch(share=True, server_port=port)
    
